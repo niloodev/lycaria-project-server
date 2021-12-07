@@ -72,7 +72,6 @@ const gameServer = new colyseus.Server({
     pingMaxRetries: 5,
     pingInterval: 7000,
 });
-gameServer.simulateLatency(450);
 
 /////////////////////////////////////////////////////////////////// Definir salas do servidor do jogo.
 
