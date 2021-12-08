@@ -2,6 +2,7 @@
 
 // Servidor HTTP
 const http = require('http'); 
+const https = require('https');
 const fs = require('fs');
 
 // Express APP.
@@ -35,7 +36,7 @@ const matchMaker = colyseus.matchMaker;
 const app = express(); 
 
 // Porta
-const port = 21238;
+const port = 80;
 
 // Conectar ao NoSql
 const mongooseHost = 'lowmanadatabase-7ki9x.gcp.mongodb.net/test?retryWrites=true&w=majority';
@@ -64,7 +65,11 @@ app.use("/user", require('./source/_userRequests'));
 app.use("/source/gameSource", express.static('source/gameSource'));
 
 // Criar Servidor HTTP.
-const server = http.createServer(app);
+//const server = http.createServer(app);
+const server = https.createServer({
+    key: fs.readFileSync("agent2-key.pem"),
+    cert: fs.readFileSync("agent2-cert.pem")
+}, app);
 
 // Criar Servidor inGame.
 const gameServer = new colyseus.Server({ 
