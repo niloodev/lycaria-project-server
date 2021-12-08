@@ -65,11 +65,11 @@ app.use("/user", require('./source/_userRequests'));
 app.use("/source/gameSource", express.static('source/gameSource'));
 
 // Criar Servidor HTTP.
-//const server = http.createServer(app);
-const server = https.createServer({
-    key: fs.readFileSync("key.pem"),
-    cert: fs.readFileSync("cert.pem")
-}, app);
+const server = http.createServer(app);
+// const server = https.createServer({
+//     key: fs.readFileSync("key.pem"),
+//     cert: fs.readFileSync("cert.pem")
+// }, app);
 
 // Criar Servidor inGame.
 const gameServer = new colyseus.Server({ 
