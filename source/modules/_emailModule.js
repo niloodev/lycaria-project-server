@@ -13,10 +13,27 @@ const nodemailer = require('nodemailer');
 const transporter = nodemailer.createTransport({
     service: 'gmail',
     auth: {
-        user: 'kieltwogz@gmail.com',
-        pass: '@sn10102003'
+        user: 'kielnevaeh@gmail.com',
+        pass: '@Sn10102003'
     }
 })
+
+// nodemailer.createTestAccount((err, account)=>{
+//     if(err){
+//         console.log(err);
+//         return;
+//     }
+
+//     let transporter = nodemailer.createTransport({
+//         host: account.smtp.host,
+//         port: account.smtp.port,
+//         secure: account.smtp.secure,
+//         auth: {
+//             user: account.user,
+//             pass: account.pass
+//         }
+//     });     
+// });
 
 // Verifica se Conexão foi um sucesso.
 transporter.verify((err)=>{
@@ -25,3 +42,4 @@ transporter.verify((err)=>{
 });
 
 module.exports = transporter;
+
