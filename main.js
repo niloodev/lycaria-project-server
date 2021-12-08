@@ -35,7 +35,7 @@ const matchMaker = colyseus.matchMaker;
 const app = express(); 
 
 // Porta
-const port = process.env.PORT || 3000; 
+const port = 21238;
 
 // Conectar ao NoSql
 const mongooseHost = 'lowmanadatabase-7ki9x.gcp.mongodb.net/test?retryWrites=true&w=majority';
