@@ -35,11 +35,11 @@ const transporter = nodemailer.createTransport({
 //     });     
 // });
 
-// Verifica se Conexão foi um sucesso.
-transporter.verify((err)=>{
-    if(err){ console.log(err) } 
-    else console.log('Email "noreply" conectado com sucesso!');
-});
+// // Verifica se Conexão foi um sucesso.
+// transporter.verify((err)=>{
+//     if(err){ console.log(err) } 
+//     else console.log('Email "noreply" conectado com sucesso!');
+// });
 
 module.exports = transporter;
 
