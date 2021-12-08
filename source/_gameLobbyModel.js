@@ -33,13 +33,13 @@ exports.GameRoom = class extends colyseus.Room {
 
         // Decodificar e validar token.
         try { var decodedToken = await jwt.verify(options.token, jwtKey) } 
-        catch { return false }
+        catch(e) { return false }
 
         // Procurar usuário no Banco de Dados.
         try {
             var user_ = await userData.find({_id: decodedToken._id, email: decodedToken.email});
             if(user_.length == 0) return false;
-        } catch { return false }
+        } catch(e) { return false }
     
         // Validar senha do token com Banco de Dados
         if (user_[0].password != decodedToken.pass) return false;

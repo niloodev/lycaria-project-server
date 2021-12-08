@@ -134,7 +134,7 @@ module.exports = class extends colyseus.Room {
                         myTeam.splice(myTeam.indexOf(m), 1);
                         teamOps_.push(m);
                         m_['team'] = newProp;
-                    } catch { return }
+                    } catch(e) { return }
                 });
                 $this.onMessage('closeClient', (c, m)=>{
                     if($this.state.selectState) return;
@@ -308,7 +308,7 @@ module.exports = class extends colyseus.Room {
 
         // Decodificar e validar token.
         try { var decodedToken = await jwt.verify(options.token, jwtKey) } 
-        catch { return false }
+        catch(e) { return false }
 
         ///////////////////////////////////////////////////////////////////// FINALIZAÇÃO DO ONAUTH
 

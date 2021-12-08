@@ -578,7 +578,7 @@ module.exports = class extends colyseus.Room {
 
         // Decodificar e validar token.
         try { var decodedToken = await jwt.verify(options.token, jwtKey) } 
-        catch { return false }
+        catch(e) { return false }
 
         // Checar se está conectado ao Lobby.
         var c_ = this.lobbyUsers((decodedToken._id).toString());
