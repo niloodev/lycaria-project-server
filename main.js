@@ -67,8 +67,8 @@ app.use("/source/gameSource", express.static('source/gameSource'));
 // Criar Servidor HTTP.
 //const server = http.createServer(app);
 const server = https.createServer({
-    key: fs.readFileSync("agent2-key.pem"),
-    cert: fs.readFileSync("agent2-cert.pem")
+    key: fs.readFileSync("key.pem"),
+    cert: fs.readFileSync("cert.pem")
 }, app);
 
 // Criar Servidor inGame.
