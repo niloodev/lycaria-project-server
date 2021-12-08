@@ -92,7 +92,7 @@ express.get('/check', (req,res)=>{
 express.post('/login', async(req,res)=>{
     // Verificar estrutura de dados.
     try { verifyObject.validateLogin.validate(req.body) } 
-    catch { return res.status(400).send('Dados inválidos.') }
+    catch(e) { return res.status(400).send('Dados inválidos.'); }
 
     // Pesquisar email no banco de dados de usuários.
     try {
