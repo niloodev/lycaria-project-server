@@ -98,20 +98,20 @@ express.post('/login', async(req,res)=>{
     try {
         var users = await userData.find({email: req.body.email});
         if (users.length == 0) return res.status(400).send('O email digitado não foi encontrado.');                 
-    } catch { return res.status(400).send('O email digitado não foi encontrado.') }
+    } catch(e) { return res.status(400).send('O email digitado não foi encontrado.'); }
     
     // Checar se a senha recebida está correta.
     try {
         var compare = await bcryptjs.compare(req.body.password, users[0].password);
         if (compare == false) return res.status(400).send('A senha digitada está incorreta.');
-    } catch { return res.status(400).send('A senha digitada está incorreta.'); }
+    } catch(e) { return res.status(400).send('A senha digitada está incorreta.'); }
     
     // Checando se a conta foi verificada.
     if (users[0].checked == false) return res.status(401).send('Essa conta não foi verificada.');
     
     // Gerando token de autenticação.
     try { var token = jwt.sign({_id: users[0]._id, email: users[0].email, pass: users[0].password}, jwtKey, {expiresIn: '30 days'}) } 
-    catch { return res.status(400).send('Erro ao gerar token.') }
+    catch(e) { return res.status(400).send('Erro ao gerar token.') }
 
     // Finalizar
     return res.status(200).send(token);
@@ -123,7 +123,7 @@ express.post('/login/requestMail', async(req,res)=>{
     try {
         var users = await userData.find({email: req.body.email});
         if(users.length == 0) return res.status(400).send('Conta inexistente.');
-    } catch { return res.status(400).send('Erro ao enviar email.') }
+    } catch(e) { return res.status(400).send('Erro ao enviar email.') }
 
     // Se a conta já estiver verificada, retorna um erro.
     if (users[0].checked == true) return res.status(400).send('Conta já verificada.');
@@ -132,7 +132,7 @@ express.post('/login/requestMail', async(req,res)=>{
     try {    
         const verifyToken = jwt.sign({_id: users[0]._id, email: req.body.email}, jwtPassKey);
         await sendConfirmationMail(req.body.email, verifyToken);
-    } catch { return res.status(400).send('Ocorreu um problema ao enviar o email.') }
+    } catch(e) { return res.status(400).send('Ocorreu um problema ao enviar o email.') }
 
     // Finalização
     return res.status(200).send('Email enviado com sucesso.');
@@ -144,25 +144,25 @@ express.post('/login/requestMail', async(req,res)=>{
 express.post('/register', async(req,res)=>{
     // Validar estrutura de dados.
     try { let v_ = verifyObject.validateRegister.validate(req.body); } 
-    catch { return res.status(400).send('Dados inválidos.') }
+    catch(e) { return res.status(400).send('Dados inválidos.') }
 
     // Buscar o email no banco de dados de usuário, se existir cancela o registro.
     try {
         var users = await userData.find({email: req.body.email});
         if (users.length != 0) return res.status(400).send('Este email já existe.');
-    } catch { return res.status(400).send('Houve um problema ao validar seu email.') }
+    } catch(e) { return res.status(400).send('Houve um problema ao validar seu email.') }
 
     // Busca o apelido no banco de dados de usuário, se existir cancela o registro.
     try {
         var users = await userData.find({nickName: req.body.nickName});
         if (users.length != 0) return res.status(400).send(`Oops! Alguém já se chama ${req.body.nickName}.`);
-    } catch { return res.status(400).send('Houve um problema ao validar seu apelido.') }
+    } catch(e) { return res.status(400).send('Houve um problema ao validar seu apelido.') }
 
     // Criptografa a senha digitada.
     try {
         var saltHash = await bcryptjs.genSalt();
         var signedPass = await bcryptjs.hash(req.body.password, saltHash);
-    } catch { return res.status(400).send('Houve um problema ao validar sua senha.') }
+    } catch(e) { return res.status(400).send('Houve um problema ao validar sua senha.') }
 
     // Cadastro de dados no banco de dados de usuário.
     try {
@@ -173,13 +173,13 @@ express.post('/register', async(req,res)=>{
             email: req.body.email,
             password: signedPass,
         });
-    } catch { return res.status(400).send('Houve um problema no seu cadastro.') }
+    } catch(e) { return res.status(400).send('Houve um problema no seu cadastro.') }
 
     // Gera o token para verificação da conta, e envia o email.
     try {    
         const verifyToken = jwt.sign({_id: newUser._id, email: req.body.email}, jwtPassKey);
         sendConfirmationMail(req.body.email, verifyToken);
-    } catch { return res.status(400).send('Houve um problema no seu cadastro.') }
+    } catch(e) { return res.status(400).send('Houve um problema no seu cadastro.') }
 
     // Finalização.
     return res.status(200).send({firstName: req.body.firstName, lastName: req.body.lastName, nickName: req.body.nickName, email: req.body.email});
@@ -192,7 +192,7 @@ express.get('/register/confirm/:tok', async(req,res)=>{
     
     // Verifica e descodifica o token recebido. Retorna uma página HTML caso haja um erro.
     try { var unToken_ = jwt.verify(token_, jwtPassKey) } 
-    catch {
+    catch(e) {
         return res.send(`
         <html>   
             <head>        
@@ -357,7 +357,7 @@ express.get('/register/confirm/:tok', async(req,res)=>{
     
     // Atualiza o estado de verificação do usuário no banco de dados. Retorna uma página HTML caso ocorra algum erro.
     try { await userData.updateOne({_id: user_[0]._id}, {$set: {checked: true}}) } 
-    catch {
+    catch(e) {
         return res.send(`
         <html>    
             <head>        
@@ -473,7 +473,7 @@ express.post('/recovery/request', async(req,res)=>{
     try {
         var user_ = await userData.find({email: email_});
         if (user_.length == 0) return res.status(400).send('Não existem contas com esse email.');
-    } catch { return res.status(400).send('Não existem contas com esse email.') }
+    } catch(e) { return res.status(400).send('Não existem contas com esse email.') }
 
     // Verifica se o usuário já verificou sua conta.
     if (user_[0].checked == false) { return res.status(401).send('Conta não verificada.') }
@@ -482,7 +482,7 @@ express.post('/recovery/request', async(req,res)=>{
     try {
         var decodedCode = jwt.sign({code: code_}, jwtCodeKey, {expiresIn: 1000*60*60}); // Código de recuperação que expira em uma hora.
         await userData.updateOne({_id: user_[0]._id}, {$set: {passCode: decodedCode}});
-    } catch { return res.status(400).send('Erro ao tentar gerar código.') }
+    } catch(e) { return res.status(400).send('Erro ao tentar gerar código.') }
 
     // Envia o email.
     sendRecoveryMail(email_, code_);
@@ -502,11 +502,11 @@ express.post('/recovery/confirm', async(req,res)=>{
     try {
         var user_ = await userData.find({email: email_});
         if (user_.length == 0) return res.status(400).send('Não existem contas com esse email.');
-    } catch { return res.status(400).send('Não existem contas com esse email.') }
+    } catch(e) { return res.status(400).send('Não existem contas com esse email.') }
 
     // Decodifica o código no banco de dados.
     try { var decodedPassCode = jwt.verify(user_[0].passCode, jwtCodeKey) } 
-    catch { return res.status(400).send('Código inválido ou expirado.') }
+    catch(e) { return res.status(400).send('Código inválido ou expirado.') }
     
     // Verifica se o código enviado é o mesmo do banco de dados.
     if (decodedPassCode.code != code_){ return res.status(400).send('Código incorreto.') }
@@ -518,7 +518,7 @@ express.post('/recovery/confirm', async(req,res)=>{
         var decodedPass = await bcryptjs.hash(newPass_, genSalt);
 
         try { await userData.updateOne({_id: user_[0]._id}, {$set: {password: decodedPass}}) } 
-        catch { return res.status(400).send('Houve um erro ao trocar sua senha.') }
+        catch(e) { return res.status(400).send('Houve um erro ao trocar sua senha.') }
 
         // Desconectar sessão se já estiver conectado
         var clients_ = await returnClientsFromLobby();
