@@ -74,8 +74,8 @@ const AegisAA = class AegisAA extends SkillClass {
         if(!this.enabled) return;
         if(checkIfMapHaveTrue(this.blocked)) return;
 
-        state.eCreate("eAegisIceAAProjectile", this.entityId, {x: state.entities[this.entityId].vector.x + (1.38 * state.entities[this.entityId].vector.scaleX), y: state.entities[this.entityId].vector.y + 0.80, scaleX: Math.sign(state.entities[this.entityId].vector.scaleX)*0.14, scaleY: 0.14}, (elementId)=>{
-            state.elements[elementId].SetMoveTo(parseFloat(params.targets_[64]), parseFloat(params.targets_[65]), 0, 0.005, 14, ()=>{
+        state.eCreate("eAegisIceAAProjectile", this.entityId, {x: state.entities[this.entityId].vector.x + (1.38 * state.entities[this.entityId].vector.scaleX), y: state.entities[this.entityId].vector.y + 0.80, scaleX: Math.sign(state.entities[this.entityId].vector.scaleX)*0.3, scaleY: 0.3}, (elementId)=>{
+            state.elements[elementId].SetMoveTo(parseFloat(params.targets_[64]), parseFloat(params.targets_[65]), 0, 0, 14, ()=>{
                 room.broadcast("Animate", {
                     name: "Anim_IceBurstA",
                     x: parseFloat(params.targets_[64]),
