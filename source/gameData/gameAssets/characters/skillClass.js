@@ -22,6 +22,14 @@ const Skill = class Skill extends Schema {
 
     //////// Funções bases de habilidades ativas e passivas.
     
+    // Inicialização Pura da Habilidade.
+    CoreStart(){
+        this.entity = state.entities[this.entityId];
+
+        this.opsTeam = (this.entity.team == "A")?"B":"A";
+        this.allieTeam = this.entity.team;
+    }
+
     // Inicialização da Habilidade.
     Start(){
 
@@ -48,8 +56,8 @@ const Skill = class Skill extends Schema {
     }
 
     // PosInflict da Habilidade
-    PosInflict(value){
-        return inflict;
+    PosInflict(inflict){
+        return;
     }   
 
     // PreTurn da Habilidade

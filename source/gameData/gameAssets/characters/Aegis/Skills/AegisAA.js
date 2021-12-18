@@ -31,12 +31,6 @@ const AegisAA = class AegisAA extends SkillClass {
     }
 
     //////// Funções bases de habilidades ativas e passivas.
-
-    // Habilidade Iniciada.
-    Start(state){
-        this.opsTeam = (state.entities[this.entityId].team == "A")?"B":"A";
-        this.allieTeam = state.entities[this.entityId].team;
-    }
     
     // Checar se habilidade esta ativada.
     CheckPush(state, room, client){
@@ -70,12 +64,19 @@ const AegisAA = class AegisAA extends SkillClass {
     }
     
     // Habilidade Ativada.
-    Push(state, room, params){
+    async Push(state, room, params){
         if(!this.enabled) return;
         if(checkIfMapHaveTrue(this.blocked)) return;
 
-        state.eCreate("eAegisIceAAProjectile", this.entityId, {x: state.entities[this.entityId].vector.x + (1.38 * state.entities[this.entityId].vector.scaleX), y: state.entities[this.entityId].vector.y + 0.80, scaleX: Math.sign(state.entities[this.entityId].vector.scaleX)*0.3, scaleY: 0.3}, (elementId)=>{
-            state.elements[elementId].SetMoveTo(parseFloat(params.targets_[64]), parseFloat(params.targets_[65]), 0, 0, 14, ()=>{
+        var t = this.entity.SetMoveTo(this.entity.vector.x + (1 * Math.sign(this.entity.vector.scaleX)), this.entity.vector.y, 0, 0.0001, 7);
+        await delay(t*500);
+        room.broadcast(this.entityId + "_Animate", {
+            type: "Trigger",
+            anim: "AutoAttack"
+        });
+        await delay(400);
+        state.eCreate("eAegisIceAAProjectile", this.entityId, {x: this.entity.vector.x + (0.25 * Math.sign(this.entity.vector.scaleX)), y: this.entity.vector.y + 0.75, scaleX: Math.sign(this.entity.vector.scaleX)*0.3, scaleY: 0.3}, (elementId)=>{
+            state.elements[elementId].SetMoveTo(parseFloat(params.targets_[64]), parseFloat(params.targets_[65]), 0, 0.0001, 16, ()=>{
                 room.broadcast("Animate", {
                     name: "Anim_IceBurstA",
                     x: parseFloat(params.targets_[64]),
@@ -84,15 +85,17 @@ const AegisAA = class AegisAA extends SkillClass {
                 
                 state.entities[params.targets_[0]].InflictHp({
                     type: this.typeOfDamage,
-                    value: this.baseDamage + state.entities[this.entityId].CharStatus.ap*this.apScaling,
+                    value: this.baseDamage + this.entity.CharStatus.ap*this.apScaling,
                     skillOrigin: this.index,
                     origin: this.entityId,
                     target: params.targets_[0]
                 }, state, room);
 
                 state.eDestroy(elementId);
-            });
+            });      
         });
+        await delay(180);
+        this.entity.SetToRoot(0, 6);
     }
 
     // Update da Habilidade

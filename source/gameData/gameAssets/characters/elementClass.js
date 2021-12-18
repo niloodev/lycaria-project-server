@@ -54,7 +54,7 @@ const Element_ = class Element_ extends Schema {
     SetToRoot(freq, speed, callback){
         this.moveTo[0] = new Vector2(this.root.x, this.root.y);
         this.moveTo[1] = freq;
-        this.moveTo[2] = 0.002;
+        this.moveTo[2] = 0.0001;
         this.moveTo[3] = 0;
         this.moveTo[4] = callback;
 
@@ -83,8 +83,7 @@ const Element_ = class Element_ extends Schema {
         if(this.moveTo[0] == null) return;
         
         this.moveTo[3] += this.moveTo[1]*deltaTime/1000;
-        if(this.moveTo[3] > 1) this.moveTo[3] = 1;
-        if(this.moveTo[3] < 0) this.moveTo[3] = 0;
+        this.moveTo[3] = Math.min(Math.max(this.moveTo[3], 0), 1);
 
         var newPos = new Vector2().lerpVectors(this.vector2Coord, this.moveTo[0], this.moveTo[3]);
 

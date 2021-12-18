@@ -25,6 +25,14 @@ const AegisPassive = class AegisPassive extends SkillClass {
         
     }
 
+    // Habilidade Iniciada.
+    Start(state){
+        this.entity = state.entities[this.entityId];
+
+        this.opsTeam = (this.entity.team == "A")?"B":"A";
+        this.allieTeam = this.entity.team;
+    }
+
     //////// Funções bases de habilidades ativas e passivas.
     ChangeForm(state){
         if(this._booleans[0] == false) {
@@ -38,12 +46,17 @@ const AegisPassive = class AegisPassive extends SkillClass {
             this._numbers[0] = 0;
         }
 
-        state.entities[this.entityId].CharStatus.apModifiers.set(this.entityId + ":AegisPassiveAP", this._numbers[0]);
-        state.entities[this.entityId].CharStatus.adModifiers.set(this.entityId + ":AegisPassiveAD", this._numbers[1]);
+        this.entity.CharStatus.apModifiers.set(this.entityId + ":AegisPassiveAP", this._numbers[0]);
+        this.entity.CharStatus.adModifiers.set(this.entityId + ":AegisPassiveAD", this._numbers[1]);
     }
 
     PosTurn(state, room){
         return new Promise(async (resolve, reject)=>{
+            if(state.turnPriorityHistory[0] != this.entityId) {
+                resolve();
+                return;
+            }
+            
             if(this._booleans[0] == false) {
                 this._numbers[1] += 1;
             }
@@ -51,8 +64,8 @@ const AegisPassive = class AegisPassive extends SkillClass {
                 this._numbers[0] += 1.5;
             }
 
-            state.entities[this.entityId].CharStatus.apModifiers.set(this.entityId + ":AegisPassiveAP", this._numbers[0]);
-            state.entities[this.entityId].CharStatus.adModifiers.set(this.entityId + ":AegisPassiveAD", this._numbers[1]);
+            this.entity.CharStatus.apModifiers.set(this.entityId + ":AegisPassiveAP", this._numbers[0]);
+            this.entity.CharStatus.adModifiers.set(this.entityId + ":AegisPassiveAD", this._numbers[1]);
             resolve();
         })
     }

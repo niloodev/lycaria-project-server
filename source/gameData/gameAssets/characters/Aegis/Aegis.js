@@ -123,12 +123,7 @@ const Aegis = class Aegis extends Character {
     }
 
     Spawn(state){
-        this.skills.forEach((v)=>{
-            v.playerId = this.playerId;
-            v.entityId = this.entityId;
 
-            v.Start(state);
-        });
     }
 
     Update(state, deltaTime){

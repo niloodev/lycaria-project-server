@@ -28,13 +28,7 @@ const AegisUlt = class AegisUlt extends SkillClass {
         this.ultDelay = 500;
     }
     //////// Funções bases de habilidades ativas e passivas.
-
-    // Habilidade Iniciada.
-    Start(state){
-        this.opsTeam = (state.entities[this.entityId].team == "A")?"B":"A";
-        this.allieTeam = state.entities[this.entityId].team;
-    }
-
+    
     // Checar se habilidade esta ativada.
     CheckPush(state, room, client){
         // type = O tipo de verify (A = BARRINHA, B = ESMAGAR BOTÂO, C = SEGURAR BOTÃO)

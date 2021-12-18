@@ -139,6 +139,7 @@ const State = class State extends schema.Schema{
                 speed: 0,
             })
         }));
+        this.entities[entityId].CoreSpawn(this);
         this.entities[entityId].Spawn(this);
 
         return entityId;
@@ -516,6 +517,7 @@ module.exports = class extends colyseus.Room {
         this.clock.clear();
         
         // Processamento de PÓS TURNO e depois PRÉ TURNO de todas entidades.~
+        // Para acessar o POSTURN de uma entidade, deve apenas acessar o primeiro elemento do histórico.
         this.state.turnPriority = "posturn";
         await delay(1000);
         await this.managePosTurn();
@@ -524,6 +526,7 @@ module.exports = class extends colyseus.Room {
             await delay(2000);
             this.roundListEntities();
         }
+        // Para acessar o PRETURN de uma entidade, deve apenas acessar o primeiro elemento do ROUNDPRIORITYLIST.
         this.state.turnPriority = "preturn";
         await delay(1000);
         await this.managePreTurn();

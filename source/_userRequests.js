@@ -34,7 +34,7 @@ const emailModule = require('./modules/_emailModule');
 const jwtKey = "a@@cuASIOSAx0AS389#$2isadpASdxzklcnx_cwaSdj0932109389ef09sadjfd0sif";
 const jwtPassKey = "ow0294Ksocx_sowisaJca9s9iS)Xxs0adsaKX)w9123jsadmSIADpSAdasd";
 const jwtCodeKey = "asjajisaf90209u2ujipdsajksd(_SD(_s-e-0e9w-qdasijdisac-09)(Wd90qwe";
-const atualLocateHTML = "https://lycaria.com.br";
+const atualLocateHTML = "http://lycaria.kinghost.net:21238";
 
 ///////////////////////////////////////////////////////////////////
 
