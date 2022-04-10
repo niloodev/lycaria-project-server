@@ -10,6 +10,7 @@
 <h4 align="center">An online turn-based game (this repository concerns the server) created with <a href="https://expressjs.com/pt-br/" target="_blank">Express</a> and <a href="https://www.colyseus.io/" target="_blank">Colyseus</a></h4>
 
 <p align="center">
+  <a href="https://github.com/niloodev/lycaria-project-game/lycaria-art.pdf">ArtBook</a> •
   <a href="#proposal">Proposal</a> •
   <a href="#tools">Tools</a> •
   <a href="#author">Author</a>
